@@ -1,5 +1,6 @@
 # 2012-renderer  
 An open-source place renderer for the version 0.69.0.646 Roblox Studio version (compatible with later versions, this was for December 2012 originally)  
+You can get this client here: https://archive.org/details/roblox-studio_20250323  
 
 ## Usage  
 Compile the project in **DEBUG** mode (Release mode could cause issues)  
