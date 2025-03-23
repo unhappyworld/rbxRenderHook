@@ -5,6 +5,7 @@ You can get this client here: https://archive.org/details/roblox-studio_20250323
 ## Usage  
 Compile the project in **DEBUG** mode (Release mode could cause issues)  
 Open the **MFCStudio** (RobloxApp clients are not compatible, no idea why)  
+Run the **render** function (read functions below)
 
 ## Functions  
 `render(filepath, x, y, url)`  
