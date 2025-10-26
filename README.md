@@ -8,11 +8,10 @@ Open the **MFCStudio** (RobloxApp clients are not compatible, no idea why)
 Run the **render** function (read functions below)
 
 ## Functions  
-`render(filepath, x, y, url)`  
+`render(filepath, x, y, isCharacter)`  
 Example:  
-`render("TestRender.png", 1280, 720, "http://www.roblox.com")`  
-
-The URL is where the image gets sent. If you don't want to send it, use a **random valid URL** instead.  
+`render("TestRender.png", 1280, 720, 1)`  
+1 is ture, 0 is false, I dont care if your ass will yap why not true or false, figure it out yourself.
   
 ## Troubleshooting
 1. Help! It's crashing!  

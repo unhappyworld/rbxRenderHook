@@ -19,6 +19,7 @@ deleteView_t ViewBase::DeleteView = (deleteView_t)(aslr(0x4C1A60));
 T_LightingSetup Lighting::setupLighting = (T_LightingSetup)(aslr(0x4BE910)); // UPDATED2
 
 T_setImageView Workspace::setImageServerView = (T_setImageView)(aslr(0x731A80)); // UPDATED2
+T_clearTerrain Workspace::clearTerrain = (T_clearTerrain)(aslr(0x728690)); // Hi
 
 T_saveRenderTarget SaveFile::saveRenderTarget = (T_saveRenderTarget)(aslr(0x4BABD0)); // UPDATED2
 

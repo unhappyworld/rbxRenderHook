@@ -11,8 +11,6 @@
 #include "TypeNames.h"
 #include <string>
 #include "dllmain.h"
-
-#include "curl/curl.h"
 #include <fstream>
 #include <vector>
 
@@ -22,7 +20,7 @@ bool isReady = false;
 DWORD* gScriptContext = nullptr;
 
 // ARGS:
-// render(path, x, y, url) (image gets POST to the url, set the url to a random VALID url if you don't want to do that)
+// render(path, x, y, isCharacter) (isCharacter will set Character View.)
 int Render(uintptr_t L)
 {
     size_t length = 0;
@@ -33,20 +31,10 @@ int Render(uintptr_t L)
     int x = Lua::lua_checkint(L, 2);
     int y = Lua::lua_checkint(L, 3);
 
-    bool isGonnaPost = true;
+    int isCharacter = Lua::lua_checkint(L, 4);
+    std::cout << Lua::lua_checkint(L, 4) << std::endl;
+    std::cout << isCharacter << std::endl;
 
-	const char* url = Lua::lua_checklstring(L, 4, &length);
-
-    CURLU* _curl = curl_url();
-    CURLUcode result = curl_url_set(_curl, CURLUPART_URL, url, 0);
-
-    if (result != CURLE_OK) {
-        std::cout << "the url you entered is invalid" << std::endl;
-        curl_easy_cleanup(_curl);
-        return 0;
-    }
-
-    curl_easy_cleanup(_curl);
     
     HWND window = FindWindowA(nullptr, "Roblox"); // this doesn't matter.
     SetWindowPos(window, 0, 0, 0, x, y, 0);
@@ -62,7 +50,11 @@ int Render(uintptr_t L)
     // ^ and do not use automatic graphics mode, set it to opengl.
     DWORD viewBase = ViewBase::CreateView(OpenGL, &context, singleton);
 
-    Workspace::setImageServerView((DWORD*)workspace, 0, 1, (DWORD*)(workspace + 0x160));
+    if (isCharacter)
+        Workspace::clearTerrain((DWORD*)workspace);
+
+    Workspace::setImageServerView((DWORD*)workspace, 0, isCharacter ? 0 : 1, (DWORD*)(workspace + 0x160));
+
     Lighting::setupLighting((DWORD*)datamodel, 0);
     BindW::bindWorkspace((DWORD*)viewBase, 0, datamodel, 0);
     RenderView::renderThumb((DWORD*)viewBase, 0);
@@ -77,30 +69,6 @@ int Render(uintptr_t L)
     std::ifstream file(path, std::ios::binary);
     std::vector<char> fileData((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
     file.close();
-
-    // curl
-    //https://stackoverflow.com/questions/9453996/sending-an-image-to-ftp-server-from-gchar-buffer-libcurl
-    CURL* curl = curl_easy_init(); // robux engine
-    
-    if (isGonnaPost == false) {
-        return 0;
-        std::cout << "done!!!!!!!!!!" << std::endl;
-    }
-
-    if (curl) {
-        curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L); // this enables uploading
-        curl_easy_setopt(curl, CURLOPT_URL, url);
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, fileData.data());
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, fileData.size());
-
-        CURLcode res = curl_easy_perform(curl);
-        curl_easy_cleanup(curl);
-        std::cout << "finished sending" << std::endl;
-
-    }
-    else {
-        std::cout << "error happeneed with curl";
-    }
 
     return 0;
 

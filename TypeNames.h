@@ -50,6 +50,8 @@ typedef void(__fastcall* T_LightingSetup)(DWORD* datamodel, DWORD* unused);
 typedef void(__fastcall* T_saveRenderTarget)(DWORD* thisPtr, DWORD* unused, const std::string& filename);
 
 typedef int(__fastcall* T_setImageView)(DWORD* thisPtr, DWORD* unused, int a3, DWORD* workspace);
+// hi!
+typedef void(__thiscall* T_clearTerrain)(DWORD* thisPtr);
 
 typedef void(__fastcall* CProcessPerfCounter_t)(void* thisPtr);
 
@@ -71,6 +73,7 @@ namespace Lighting {
 }
 
 namespace Workspace {
+	extern T_clearTerrain clearTerrain;
 	extern T_setImageView setImageServerView;
 }
 
