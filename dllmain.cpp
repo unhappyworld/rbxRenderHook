@@ -40,6 +40,9 @@ int Render(uintptr_t L)
     SetWindowPos(window, 0, 0, 0, x, y, 0);
     OSContext context{ window , x , y };
 
+    //deadass fix
+    int count = 0;
+
     DWORD workspace = WorkspaceFuncs::findWorkspace(gScriptContext);
     DWORD datamodel = *(DWORD*)(workspace + 0x38);
 
@@ -48,16 +51,21 @@ int Render(uintptr_t L)
 
     // NOTE: IF YOU DO NOT USE OPENGL AND USE DIRECT3D9 INSTEAD, THE SKY WILL BE INVISIBLE. USE OPENGL.
     // ^ and do not use automatic graphics mode, set it to opengl.
-    DWORD viewBase = ViewBase::CreateView(OpenGL, &context, singleton);
+    DWORD viewBase = ViewBase::CreateView(Direct3D9, &context, singleton);
 
     if (isCharacter)
         Workspace::clearTerrain((DWORD*)workspace);
+        std::cout << "Clearned terrain" << std::endl;
 
     Workspace::setImageServerView((DWORD*)workspace, 0, isCharacter ? 0 : 1, (DWORD*)(workspace + 0x160));
 
     Lighting::setupLighting((DWORD*)datamodel, 0);
     BindW::bindWorkspace((DWORD*)viewBase, 0, datamodel, 0);
-    RenderView::renderThumb((DWORD*)viewBase, 0);
+
+    while (count < 100) { // bandaid ass fix
+        RenderView::renderThumb((DWORD*)viewBase, isCharacter ? 0 : 1);
+        count++;
+    }
     SaveFile::saveRenderTarget((DWORD*)viewBase, 0, path); // you could also use the screenshot function however that yields lower quality results
 
     std::cout << "saved!" << std::endl;
@@ -92,6 +100,7 @@ void __fastcall openStateHook(DWORD* thisPtr)
         Lua::lua_pushcclosure(globalState, Close, 0);
         Lua::lua_setfield(globalState, -10002, "close");
         std::cout << "pushed lua functions" << std::endl;
+        
     }
 
 }

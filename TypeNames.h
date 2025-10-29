@@ -37,7 +37,7 @@ typedef void(__thiscall* T_openstate)(DWORD* thisPtr);
 typedef int(__cdecl* T_findWorkspace)(DWORD* ScriptContext);
 
 typedef void(__fastcall* RenderView__bindWorkspace_t)(DWORD* thisPtr, DWORD* unused, int datamodel, int a4);
-typedef void(__fastcall* T_renderThumb)(DWORD* thisPtr, DWORD* unused);
+typedef void(__fastcall* T_renderThumb)(DWORD* thisPtr, int useDolly);
 typedef void(__fastcall* deleteView_t)(DWORD* thisPtr, DWORD* idk, int a3);
 
 typedef int(__cdecl* T_CRenderSingleton)();
